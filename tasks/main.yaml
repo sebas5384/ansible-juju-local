@@ -1,0 +1,20 @@
+- name: "Install some dependencies"
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-apt
+    - git
+
+- name: "Add Juju repository"
+  apt_repository: repo='ppa:juju/stable'
+
+- name: "Install Juju core and local"
+  apt: pkg=juju-local state=present
+
+- name: "Generate environments configurations"
+  command: juju generate-config creates=~/.juju/environments.yaml
+
+- name: "Switch to local"
+  command: juju switch local
+
+- name: "Bootstrap Juju local"
+  command: juju bootstrap creates=~/.juju/environments/local.jenv

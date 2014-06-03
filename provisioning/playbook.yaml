@@ -1,0 +1,47 @@
+- hosts: all
+  user: vagrant
+
+  tasks:
+
+    - name: "Install some dependencies"
+      sudo: yes
+      apt: pkg={{ item }} state=present
+      with_items:
+        - python-apt
+        - git-core
+
+    # Install Juju local
+    - name: "Add Juju repository"
+      sudo: yes
+      apt_repository: repo='ppa:juju/stable'
+
+    - name: "Install Juju core and local"
+      sudo: yes
+      apt: pkg={{ item }} state=present
+      with_items:
+        - juju-local
+        # - charm-tools
+
+    - name: "Generate environments configurations"
+      command: juju init creates='~/.juju/environments.yaml'
+
+    # Prepare the directory for assembling
+    - file: dest='~/.managed-envs' state=directory
+    - command: cp ~/.juju/environments.yaml ~/.managed-envs/0-default.yaml creates='~/.managed-envs/0-default.yaml'
+
+    # Local environments
+    - name: "Creates declared environments"
+      template: src='templates/environments.yaml.j2' dest='~/.managed-envs/1-local.yaml'
+
+    - name: "Assemble the environments into the environments.yaml file"
+      assemble: >
+        src='~/.managed-envs'
+        dest='~/.juju/environments.yaml'
+        delimiter='### MANAGED ###'
+        backup=yes
+
+    - name: "Vagrant user must access lxc containers"
+      sudo: yes
+      file: mode=750 dest='/var/lib/lxc'
+    - user: name=vagrant groups=root
+      sudo: yes

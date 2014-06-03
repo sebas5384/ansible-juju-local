@@ -1,0 +1,10 @@
+{% if local_envs is iterable %}
+  {% for env in local_envs %}
+    
+    {{ env }}:
+        type: local
+        storage-port: {{ 8041 + loop.index }}
+        state-port: {{ 37018 + loop.index }}
+        api-port: {{ 17071 + loop.index }}
+  {% endfor %}
+{% endif %}

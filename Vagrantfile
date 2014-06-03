@@ -18,10 +18,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.verbose = 'v'
   end
 
-  config.vm.synced_folder "../charms", "/home/vagrant/charms"
+  # config.vm.synced_folder "../charms", "/home/vagrant/charms"
   
   # config.sshfs.paths = {
-  #   "/var/lib/lxc/vagrant-local_fiesc-machine-2/rootfs/var/www" => "fiesc-www"
+  #   "/var/lib/lxc/vagrant-local-machine-1/rootfs/var/www" => "www"
   # }
 
   # Disable automatic box update checking. If you disable this, then

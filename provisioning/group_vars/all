@@ -1,5 +1,4 @@
 ---
 local_envs:
-  - local_fiesc
-  - local_intelbras
   - local_sandbox
+  - local_drupal

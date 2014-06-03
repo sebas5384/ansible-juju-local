@@ -20,7 +20,7 @@
       apt: pkg={{ item }} state=present
       with_items:
         - juju-local
-        # - charm-tools
+        - charm-tools
 
     - name: "Generate environments configurations"
       command: juju init creates='~/.juju/environments.yaml'
